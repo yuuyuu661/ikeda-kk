@@ -11,27 +11,34 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  for (let i = 1; i <= 7; i++) {
-    const selects = [
-      document.querySelector(`select[name="event${i}-1"]`),
-      document.querySelector(`select[name="event${i}-2"]`),
-      document.querySelector(`select[name="event${i}-3"]`)
-    ];
-    selects.forEach(sel => {
+  // 重複選択の無効化処理（完全版）
+for (let i = 1; i <= 7; i++) {
+  const selects = [
+    document.querySelector(`select[name="event${i}-1"]`),
+    document.querySelector(`select[name="event${i}-2"]`),
+    document.querySelector(`select[name="event${i}-3"]`)
+  ];
+
+  // 全セレクトにイベントを設定
+  selects.forEach(sel => {
     sel.addEventListener('change', () => {
       const selectedValues = selects.map(s => s.value);
 
       selects.forEach(s => {
         Array.from(s.options).forEach(opt => {
-          if (opt.value === '') return;
-          // 選ばれていて、かつ今のセレクトボックスではない場合 → 無効化
-          opt.disabled = selectedValues.includes(opt.value) && s.value !== opt.value;
-          });
+          if (opt.value === '') {
+            opt.disabled = false; // 「選択」は常に有効
+            return;
+          }
+
+          // すでに他のセレクトで選ばれていたら無効化
+          const isSelectedElsewhere = selectedValues.includes(opt.value) && s.value !== opt.value;
+          opt.disabled = isSelectedElsewhere;
         });
       });
     });
-  }
-
+  });
+}
   document.getElementById("customForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     if (!confirm("この内容で送信しますか？")) return;
