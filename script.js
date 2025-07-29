@@ -61,7 +61,7 @@ for (let i = 1; i <= 7; i++) {
       if (!name) continue;
 
       const data = new FormData();
-      data.append("entry.1362334110", form[`company${i}`]?.value || ""); // 会社名
+      data.append("entry.404333895", form[`company${i}`]?.value || ""); // 会社名
       data.append("entry.129665814", form[`kana${i}`]?.value || "");     // ふりがな
       data.append("entry.1402396482", form[`name${i}`]?.value || "");    // お名前
       data.append("entry.715732439", form[`gender${i}`]?.value || "");   // 男女
