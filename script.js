@@ -47,18 +47,21 @@ document.getElementById("customForm").addEventListener("submit", async (e) => {
   const formURL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSf1fnvxl1wKoaGoeeFu_tyOYGeTqwK7kJ5k2y67vo9eASRPzg/formResponse";
 
   // 記入者の会社名（全行に使い回す）
-  const headerCompany = form.querySelector(`[name="entry.404333895"]`)?.value || "";
+  const headerCompany = form.querySelector(`[name="entry.404333895"]`)?.value.trim();
+if (!headerCompany) {
+  alert("記入者の会社名を入力してください。");
+  return;
+}
 
   // 記入者情報だけ最初に送信（そのまま）
   const headerData = new FormData();
-  headerData.append("entry.404333895", headerCompany);
-  headerData.append("entry.900152718", form.querySelector(`[name="entry.900152718"]`)?.value || "");
-  try {
-    await fetch(formURL, { method: "POST", mode: "no-cors", body: headerData });
-  } catch (err) {
-    console.error("記入者情報の送信に失敗しました", err);
-  }
-
+headerData.append("entry.404333895", headerCompany);
+headerData.append("entry.900152718", form.querySelector(`[name="entry.900152718"]`)?.value || "");
+try {
+  await fetch(formURL, { method: "POST", mode: "no-cors", body: headerData });
+} catch (err) {
+  console.error("記入者情報の送信に失敗しました", err);
+}
   // 各参加者のデータ送信（会社名は headerCompany を使う）
   for (let i = 1; i <= 7; i++) {
     const name = form.querySelector(`[name="name${i}"]`)?.value.trim();
