@@ -97,16 +97,18 @@ document.addEventListener('DOMContentLoaded', () => {
       data.append("entry.1330943837", form.querySelector(`[name="event${i}-3"]`)?.value || "");
       data.append("entry.1486323525", form.querySelector(`[name="contact${i}"]`)?.value || "");
 
-      try {
+       try {
         await fetch(formURL, { method: "POST", mode: "no-cors", body: data });
       } catch (err) {
         console.error(`行${i} の送信に失敗しました`, err);
       }
-     
+    }
 
+    // ✅← この位置に配置！
     alert("送信が完了しました！");
     form.reset();
   });
 });
+
 
 
