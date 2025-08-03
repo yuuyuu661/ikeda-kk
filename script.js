@@ -93,9 +93,20 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (err) {
         console.error(`行${i} の送信に失敗しました`, err);
       }
+       // 👇 ここに追加してください！
+    // --- 参加が選ばれているかチェック ---
+    const isAttending = form.querySelector('input[name="attendance"]:checked')?.value === "参加";
+
+    if (isAttending) {
+      const firstName = form.querySelector('[name="name1"]')?.value.trim();
+      if (!firstName) {
+        alert("参加を選んだ場合は、1行目の氏名を入力してください。");
+        return;
+      }
     }
 
     alert("送信が完了しました！");
     form.reset();
   });
 });
+
