@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
               return;
             }
 
-            // 他の select に選ばれている値は無効化
             const isSelectedElsewhere = selectedValues.includes(opt.value) && s.value !== opt.value;
             opt.disabled = isSelectedElsewhere;
           });
@@ -60,25 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
       alert("記入者の氏名を入力してください。");
       return;
     }
-      const isAttending = form.querySelector('input[name="attendance"]:checked')?.value === "参加";
-  if (isAttending) {
-    const firstName = form.querySelector('[name="name1"]')?.value.trim();
-    if (!firstName) {
-      alert("参加を選んだ場合は、1行目の氏名を入力してください。");
-      return;
-    }
-    }
-    // 記入者情報送信
-    const headerData = new FormData();
-    headerData.append("entry.404333895", headerCompany); // 記入者 会社名
-    headerData.append("entry.900152718", headerName);    // 記入者 氏名
 
-    try {
-      await fetch(formURL, { method: "POST", mode: "no-cors", body: headerData });
-    } catch (err) {
-      console.error("記入者情報の送信に失敗しました", err);
-    }
-     // 🔽 ここに追加！
+    // ✅ 1回だけチェック
     const isAttending = form.querySelector('input[name="attendance"]:checked')?.value === "参加";
     if (isAttending) {
       const firstName = form.querySelector('[name="name1"]')?.value.trim();
@@ -88,13 +70,23 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // 各行のエントリー送信
+    // 記入者情報送信
+    const headerData = new FormData();
+    headerData.append("entry.404333895", headerCompany);
+    headerData.append("entry.900152718", headerName);
+
+    try {
+      await fetch(formURL, { method: "POST", mode: "no-cors", body: headerData });
+    } catch (err) {
+      console.error("記入者情報の送信に失敗しました", err);
+    }
+
     for (let i = 1; i <= 7; i++) {
       const name = form.querySelector(`[name="name${i}"]`)?.value.trim();
       if (!name) continue;
 
       const data = new FormData();
-      data.append("entry.1362334110", headerCompany); // 会社名（共通）
+      data.append("entry.1362334110", headerCompany);
       data.append("entry.129665814", form.querySelector(`[name="kana${i}"]`)?.value || "");
       data.append("entry.1402396482", name);
       data.append("entry.715732439", form.querySelector(`[name="gender${i}"]`)?.value || "");
@@ -104,19 +96,14 @@ document.addEventListener('DOMContentLoaded', () => {
       data.append("entry.1330943837", form.querySelector(`[name="event${i}-3"]`)?.value || "");
       data.append("entry.1486323525", form.querySelector(`[name="contact${i}"]`)?.value || "");
 
-       try {
+      try {
         await fetch(formURL, { method: "POST", mode: "no-cors", body: data });
       } catch (err) {
         console.error(`行${i} の送信に失敗しました`, err);
       }
     }
 
-    // ✅← この位置に配置！
     alert("送信が完了しました！");
     form.reset();
   });
 });
-
-
-
-
